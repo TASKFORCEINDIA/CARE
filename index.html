@@ -1,218 +1,148 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>CARE</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CARE</title>
 
-  <style>
-    /* RESET */
-    *{
-      margin:0;
-      padding:0;
-      box-sizing:border-box;
-      font-family: Arial, Helvetica, sans-serif;
-    }
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial,Helvetica,sans-serif}
+body{background:#f9fafb;color:#111}
 
-    /* BODY */
-    body{
-      background:#f9fafb;
-      color:#111;
-      line-height:1.7;
-    }
+/* SCREENS */
+.screen{display:none;padding:30px}
+.screen.active{display:block}
 
-    /* HEADER */
-    header{
-      padding:36px 20px;
-      text-align:center;
-      background:#ffffff;
-      border-bottom:1px solid #eaeaea;
-    }
+/* SPLASH */
+#splash{
+ position:fixed;top:0;left:0;width:100%;height:100vh;
+ background:#1f6fe0;color:#fff;
+ display:flex;align-items:center;justify-content:center;
+ font-size:36px;letter-spacing:3px;z-index:10
+}
 
-    header h1{
-      font-size:32px;
-      letter-spacing:2px;
-    }
+/* HEADER */
+.header{text-align:center;margin-bottom:30px}
+.header h1{letter-spacing:2px}
 
-    header p{
-      margin-top:6px;
-      font-size:14px;
-      color:#666;
-    }
+/* BUTTONS */
+.btn{
+ width:100%;padding:16px;margin:12px 0;
+ border:none;border-radius:10px;
+ background:#111;color:#fff;font-size:16px
+}
+.btn.secondary{background:#25D366}
+.btn.light{background:#eaeaea;color:#111}
 
-    /* SECTIONS */
-    section{
-      max-width:1000px;
-      margin:auto;
-      padding:50px 20px;
-    }
+/* LIST */
+.list button{
+ width:100%;padding:14px;margin:8px 0;
+ border:1px solid #ddd;border-radius:8px;
+ background:#fff;text-align:left
+}
 
-    section + section{
-      margin-top:10px;
-    }
+/* SEARCH */
+input{
+ width:100%;padding:14px;
+ border:1px solid #ddd;border-radius:8px;
+ margin:15px 0
+}
 
-    /* HERO */
-    .hero h2{
-      font-size:28px;
-      margin-bottom:16px;
-      font-weight:600;
-    }
-
-    .hero p{
-      max-width:720px;
-      color:#555;
-    }
-
-    /* CARDS */
-    .cards{
-      display:grid;
-      grid-template-columns:repeat(auto-fit, minmax(240px, 1fr));
-      gap:22px;
-      margin-top:34px;
-    }
-
-    .card{
-      background:#ffffff;
-      border:1px solid #eaeaea;
-      padding:26px;
-      border-radius:12px;
-      box-shadow:0 8px 20px rgba(0,0,0,0.04);
-    }
-
-    .card h3{
-      font-size:17px;
-      margin-bottom:8px;
-      font-weight:600;
-    }
-
-    .card p{
-      font-size:14px;
-      color:#666;
-    }
-
-    /* CATEGORIES */
-    section h2{
-      font-size:22px;
-      margin-bottom:16px;
-    }
-
-    ul{
-      list-style:none;
-      margin-top:20px;
-    }
-
-    ul li{
-      padding:12px 0;
-      border-bottom:1px solid #eaeaea;
-      color:#333;
-    }
-
-    /* CTA */
-    .cta{
-      text-align:center;
-      margin-top:36px;
-    }
-
-    .cta p{
-      margin-bottom:14px;
-      color:#555;
-    }
-
-    .cta a{
-      display:inline-block;
-      padding:14px 30px;
-      background:#25D366;
-      color:#ffffff;
-      text-decoration:none;
-      border-radius:30px;
-      font-weight:bold;
-    }
-
-    /* FOOTER */
-    footer{
-      text-align:center;
-      padding:22px;
-      font-size:12px;
-      color:#888;
-      border-top:1px solid #eaeaea;
-      background:#ffffff;
-    }
-  </style>
+/* INFO TEXT */
+.small{color:#666;font-size:14px;margin-top:8px}
+.center{text-align:center}
+</style>
 </head>
 
 <body>
 
-<header>
-  <h1>CARE</h1>
-  <p>Healthcare Procurement Platform</p>
-</header>
+<!-- SPLASH -->
+<div id="splash">CARE</div>
 
-<section class="hero">
-  <h2>Post your requirement. Get verified suppliers.</h2>
-  <p>
-    CARE connects hospitals, labs, and healthcare buyers with trusted suppliers
-    for medical consumables, lab items, equipment, and services.
-  </p>
-
-  <div️
-  <div class="cards">
-    <div class="card">
-      <h3>Post Requirement</h3>
-      <p>Share your purchase requirement and receive offers from verified suppliers.</p>
-    </div>
-
-    <div class="card">
-      <h3>Browse Suppliers</h3>
-      <p>Find trusted vendors across medical, lab, and hospital supplies.</p>
-    </div>
-
-    <div class="card">
-      <h3>Logistics & Services</h3>
-      <p>Delivery, installation, AMC, and service coordination.</p>
-    </div>
+<!-- HOME -->
+<div id="home" class="screen active">
+  <div class="header">
+    <h1>CARE</h1>
   </div>
-</section>
+  <button class="btn" onclick="go('categories')">Requirement</button>
+  <button class="btn secondary" onclick="alert('WhatsApp support')">Contact on WhatsApp</button>
+</div>
 
-<section>
-  <h2>Categories</h2>
-  <ul>
-    <li>Medical Consumables</li>
-    <li>Lab Consumables</li>
-    <li>Devices & Equipment</li>
-    <li>Infection Control</li>
-    <li>Hospital Services & AMC</li>
-  </ul>
-
-  <div class="cta">
-    <p>No logins. No complexity. Start on WhatsApp.</p>
-    <a href="https://wa.me/91XXXXXXXXXX" target="_blank">
-      Contact on WhatsApp
-    </a>
+<!-- CATEGORIES -->
+<div id="categories" class="screen">
+  <h2>Requirement</h2>
+  <div class="list">
+    <button onclick="openSub()">Medical Consumables</button>
+    <button>Lab Consumables</button>
+    <button>Devices & Equipment</button>
+    <button>Infection Control</button>
+    <button>Hospital Services</button>
   </div>
-</section>
+  <button class="btn light" onclick="go('home')">Back</button>
+</div>
 
-<section>
-  <div class="cards">
-    <div class="card">
-      <h3>Verified Suppliers</h3>
-      <p>All vendors are checked for compliance, quality, and reliability.</p>
-    </div>
-
-    <div class="card">
-      <h3>Transparent Process</h3>
-      <p>Clear communication, clear pricing, and structured procurement.</p>
-    </div>
-
-    <div class="card">
-      <h3>Reliable Support</h3>
-      <p>WhatsApp-first assistance for faster coordination and resolution.</p>
-    </div>
+<!-- SUBCATEGORY + SEARCH -->
+<div id="search" class="screen">
+  <h2>Medical Consumables</h2>
+  <input placeholder="Search medical items…">
+  <div class="small">Example: Syringes, Gloves, Test kits</div>
+  <div class="list">
+    <button onclick="selectItem()">Syringes 10ml</button>
+    <button>Test Kits</button>
+    <button>Thermometers</button>
   </div>
-</section>
+  <button class="btn light" onclick="go('categories')">Back</button>
+</div>
 
-<footer>
-  © CARE. All rights reserved.
-</footer>
+<!-- ITEM COMFORT -->
+<div id="item" class="screen center">
+  <h2>Item selected</h2>
+  <p class="small">No order placed yet</p><br>
+  <strong>Syringes 10ml</strong><br><br>
+  <button class="btn" onclick="go('review')">Add to Requirement</button>
+  <button class="btn light" onclick="go('search')">Back</button>
+</div>
+
+<!-- REVIEW -->
+<div id="review" class="screen">
+  <h2>Requirement Review</h2>
+  <p class="small">This is not an order.</p><br>
+  • Syringes 10ml – Qty: 10<br><br>
+  <button class="btn" onclick="go('po1')">Proceed to PO</button>
+  <button class="btn light" onclick="go('home')">Cancel</button>
+</div>
+
+<!-- PO FLOW -->
+<div id="po1" class="screen center">
+  <h2>Generate Purchase Order</h2>
+  <p class="small">You can review before confirming.</p><br>
+  <strong>XYZ-HOSP-PO-001</strong><br><br>
+  <button class="btn" onclick="go('po2')">Generate PO</button>
+</div>
+
+<div id="po2" class="screen center">
+  <h2>Confirm Purchase Order</h2>
+  <p class="small">No order placed without final confirmation.</p><br>
+  <button class="btn" onclick="go('po3')">Confirm PO</button>
+  <button class="btn light" onclick="go('review')">Edit</button>
+</div>
+
+<div id="po3" class="screen center">
+  <h2>Final Confirmation</h2>
+  <p class="small">You can cancel before supplier confirmation.</p><br>
+  <button class="btn" onclick="alert('PO Shared with CARE')">Final Confirm</button>
+  <button class="btn light" onclick="go('home')">Cancel</button>
+</div>
+
+<script>
+function go(id){
+ document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'))
+ document.getElementById(id).classList.add('active')
+}
+function openSub(){ go('search') }
+function selectItem(){ go('item') }
+setTimeout(()=>{document.getElementById('splash').style.display='none'},1200)
+</script>
 
 </body>
 </html>
