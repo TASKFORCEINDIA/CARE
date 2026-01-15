@@ -218,14 +218,17 @@ function renderReview(){
      <button onclick="cartQty(${i},1)">+</button>
     </div>
    </div>`;
- });
-function cartQty(i,v){
+ function cartQty(i, v){
   cart[i].qty = Math.max(0, cart[i].qty + v);
+
   if(cart[i].qty === 0){
-    cart.splice(i,1); // remove item if qty becomes 0
+    cart.splice(i, 1); // remove item
   }
+
+  updateCounts();   // 🔑 VERY IMPORTANT
   renderReview();
 }
+
 
 
 function updateCounts(){
