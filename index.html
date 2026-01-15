@@ -10,7 +10,7 @@
 body{background:#f7f8fa;color:#111}
 
 /* Screens */
-.screen{display:none;padding:24px}
+.screen{display:none;padding:22px}
 .screen.active{display:block}
 
 /* Splash */
@@ -30,32 +30,27 @@ body{background:#f7f8fa;color:#111}
 .btn.green{background:#25D366}
 .btn.light{background:#eaeaea;color:#111}
 
-/* List buttons */
+/* Lists */
 .list button{
  width:100%;padding:14px;margin:8px 0;
  border:1px solid #ddd;border-radius:8px;
  background:#fff;text-align:left
 }
 
-/* Search */
-input{
- width:100%;padding:14px;margin:12px 0;
- border:1px solid #ccc;border-radius:8px
-}
-
 /* Quantity */
 .qty{
- display:flex;gap:10px;align-items:center;justify-content:center
+ display:flex;align-items:center;gap:12px;margin:12px 0
 }
 .qty button{
- width:40px;height:40px;border-radius:8px;border:1px solid #ccc;background:#fff
+ width:38px;height:38px;border-radius:8px;
+ border:1px solid #ccc;background:#fff;font-size:18px
 }
-.qty span{font-size:18px}
 
-/* Text helpers */
+/* Helpers */
 h2{margin-bottom:10px}
 .small{font-size:14px;color:#666}
 .center{text-align:center}
+.itemBox{border-bottom:1px solid #ddd;padding:10px 0}
 </style>
 </head>
 
@@ -75,7 +70,7 @@ h2{margin-bottom:10px}
 <div id="categories" class="screen">
   <h2>Requirement</h2>
   <div class="list">
-    <button onclick="go('subcats')">Medical Consumables</button>
+    <button onclick="openCategory('Medical Consumables')">Medical Consumables</button>
     <button>Lab Consumables</button>
     <button>Devices & Equipment</button>
     <button>Infection Control</button>
@@ -86,72 +81,142 @@ h2{margin-bottom:10px}
 
 <!-- SUB-CATEGORIES -->
 <div id="subcats" class="screen">
-  <h2>Medical Consumables</h2>
+  <h2 id="subTitle"></h2>
   <div class="list">
-    <button onclick="go('search')">Syringes</button>
-    <button onclick="go('search')">Gloves</button>
-    <button onclick="go('search')">IV Sets</button>
-    <button onclick="go('search')">Catheters</button>
+    <button onclick="openItems('Syringes')">Syringes</button>
+    <button onclick="openItems('Gloves')">Gloves</button>
+    <button onclick="openItems('IV Sets')">IV Sets</button>
   </div>
   <button class="btn light" onclick="go('categories')">Back</button>
 </div>
 
-<!-- SEARCH (ONLY AFTER SUBCAT) -->
-<div id="search" class="screen">
-  <h2>Syringes</h2>
-  <input placeholder="Search within syringes…">
-  <div class="small">Example: 10ml, 5ml, insulin</div>
+<!-- ITEMS -->
+<div id="items" class="screen">
+  <h2 id="itemTitle"></h2>
   <div class="list">
-    <button onclick="go('item')">Syringes 10ml</button>
-    <button onclick="go('item')">Syringes 5ml</button>
+    <button onclick="selectItem('10ml')">10ml</button>
+    <button onclick="selectItem('5ml')">5ml</button>
   </div>
   <button class="btn light" onclick="go('subcats')">Back</button>
 </div>
 
-<!-- ITEM -->
-<div id="item" class="screen center">
-  <h2>Syringes 10ml</h2>
-  <p class="small">No order placed yet</p><br>
+<!-- ITEM ADD -->
+<div id="addItem" class="screen">
+  <h2 id="addItemTitle"></h2>
+  <p class="small">No order placed yet</p>
 
   <div class="qty">
     <button onclick="changeQty(-1)">–</button>
     <span id="qty">1</span>
     <button onclick="changeQty(1)">+</button>
-  </div><br>
+  </div>
 
-  <button class="btn" onclick="go('review')">Add to Requirement</button>
-  <button class="btn light" onclick="go('search')">Back</button>
+  <button class="btn" onclick="addToRequirement()">Add to Requirement</button>
+  <button class="btn light" onclick="go('items')">Back</button>
 </div>
 
 <!-- REVIEW -->
 <div id="review" class="screen">
   <h2>Requirement Review</h2>
   <p class="small">This is not an order</p><br>
-  • Syringes 10ml – Qty: <span id="reviewQty">1</span><br><br>
-  <button class="btn" onclick="go('po')">Proceed to PO</button>
-  <button class="btn light" onclick="go('home')">Cancel</button>
+
+  <div id="reviewList"></div>
+
+  <button class="btn" onclick="go('po1')">Proceed to PO</button>
+  <button class="btn light" onclick="cancelAll()">Cancel</button>
 </div>
 
 <!-- PO -->
-<div id="po" class="screen center">
-  <h2>Generate PO</h2>
+<div id="po1" class="screen center">
+  <h2>Generate Purchase Order</h2>
   <p class="small">You can review before confirming</p><br>
   <strong>XYZ-HOSP-PO-001</strong><br><br>
-  <button class="btn">Generate PO</button>
+  <button class="btn" onclick="go('po2')">Generate PO</button>
   <button class="btn light" onclick="go('review')">Back</button>
 </div>
 
+<div id="po2" class="screen center">
+  <h2>Confirm Purchase Order</h2>
+  <p class="small">No order placed without final confirmation</p><br>
+  <button class="btn" onclick="go('po3')">Confirm PO</button>
+  <button class="btn light" onclick="go('review')">Edit</button>
+</div>
+
+<div id="po3" class="screen center">
+  <h2>Final Confirmation</h2>
+  <p class="small">You can cancel before supplier confirmation</p><br>
+  <button class="btn" onclick="alert('PO shared with CARE')">Final Confirm</button>
+  <button class="btn light" onclick="cancelAll()">Cancel</button>
+</div>
+
 <script>
+let category="",subcat="",item="",qty=1
+let cart=[]
+
 function go(id){
  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'))
  document.getElementById(id).classList.add('active')
 }
 
-let qty=1
+function openCategory(c){
+ category=c
+ document.getElementById('subTitle').innerText=c
+ go('subcats')
+}
+
+function openItems(sc){
+ subcat=sc
+ document.getElementById('itemTitle').innerText=sc
+ go('items')
+}
+
+function selectItem(i){
+ item=subcat+" "+i
+ qty=1
+ document.getElementById('addItemTitle').innerText=item
+ document.getElementById('qty').innerText=qty
+ go('addItem')
+}
+
 function changeQty(v){
  qty=Math.max(1,qty+v)
  document.getElementById('qty').innerText=qty
- document.getElementById('reviewQty').innerText=qty
+}
+
+function addToRequirement(){
+ let found=cart.find(x=>x.name===item)
+ if(found){found.qty+=qty}
+ else{cart.push({name:item,qty:qty})}
+ renderReview()
+ go('review')
+}
+
+function renderReview(){
+ let html=""
+ cart.forEach((x,i)=>{
+  html+=`
+  <div class="itemBox">
+   ${x.name}<br>
+   <div class="qty">
+    <button onclick="cartQty(${i},-1)">–</button>
+    <span>${x.qty}</span>
+    <button onclick="cartQty(${i},1)">+</button>
+   </div>
+  </div>`
+ })
+ document.getElementById('reviewList').innerHTML=html
+}
+
+function cartQty(i,v){
+ cart[i].qty=Math.max(1,cart[i].qty+v)
+ renderReview()
+}
+
+function cancelAll(){
+ if(confirm("Cancel and clear all items?")){
+  cart=[]
+  go('home')
+ }
 }
 
 setTimeout(()=>{document.getElementById('splash').style.display='none'},1200)
