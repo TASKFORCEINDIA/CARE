@@ -3,223 +3,141 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CARE</title>
+<title>CARE 2.0</title>
 
 <style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:Arial,Helvetica,sans-serif}
-body{background:#f7f8fa;color:#111}
-
-/* Screens */
-.screen{display:none;padding:22px}
-.screen.active{display:block}
-
-/* Splash */
-#splash{
- position:fixed;inset:0;
- background:#0a6cf1;color:#fff;
- display:flex;align-items:center;justify-content:center;
- font-size:34px;letter-spacing:3px;z-index:10
+body{
+  margin:0;
+  font-family:Arial,Helvetica,sans-serif;
+  background:#f7f7f7;
+  color:#111;
+}
+header{
+  padding:16px;
+  background:#ffffff;
+  border-bottom:1px solid #ddd;
+  text-align:center;
+}
+header h1{
+  margin:0;
+  font-size:22px;
 }
 
-/* Buttons */
-.btn{
- width:100%;padding:16px;margin:12px 0;
- border:none;border-radius:10px;
- background:#111;color:#fff;font-size:16px
-}
-.btn.green{background:#25D366}
-.btn.light{background:#eaeaea;color:#111}
-
-/* Lists */
-.list button{
- width:100%;padding:14px;margin:8px 0;
- border:1px solid #ddd;border-radius:8px;
- background:#fff;text-align:left
+.container{
+  padding:16px;
 }
 
-/* Quantity */
-.qty{
- display:flex;align-items:center;gap:12px;margin:12px 0
+.category{
+  margin-bottom:20px;
 }
-.qty button{
- width:38px;height:38px;border-radius:8px;
- border:1px solid #ccc;background:#fff;font-size:18px
+.category h2{
+  font-size:18px;
+  margin-bottom:10px;
 }
 
-/* Helpers */
-h2{margin-bottom:10px}
-.small{font-size:14px;color:#666}
-.center{text-align:center}
-.itemBox{border-bottom:1px solid #ddd;padding:10px 0}
+.product{
+  background:#fff;
+  padding:12px;
+  margin-bottom:10px;
+  border-radius:6px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  border:1px solid #e5e5e5;
+}
+
+.product span{
+  font-size:14px;
+}
+
+.product button{
+  padding:6px 10px;
+  border:none;
+  background:#111;
+  color:#fff;
+  border-radius:4px;
+  cursor:pointer;
+}
+
+/* CART */
+.cart{
+  position:fixed;
+  bottom:0;
+  left:0;
+  right:0;
+  background:#111;
+  color:#fff;
+  padding:12px 16px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.cart button{
+  background:#fff;
+  color:#111;
+  border:none;
+  padding:6px 12px;
+  border-radius:4px;
+  cursor:pointer;
+}
 </style>
 </head>
 
 <body>
 
-<!-- SPLASH -->
-<div id="splash">CARE</div>
+<header>
+  <h1>CARE 2.0</h1>
+</header>
 
-<!-- HOME -->
-<div id="home" class="screen active center">
-  <h2>CARE</h2><br>
-  <button class="btn" onclick="go('categories')">Requirement</button>
-  <button class="btn green">Contact on WhatsApp</button>
-</div>
+<div class="container">
 
-<!-- CATEGORIES -->
-<div id="categories" class="screen">
-  <h2>Requirement</h2>
-  <div class="list">
-    <button onclick="openCategory('Medical Consumables')">Medical Consumables</button>
-    <button>Lab Consumables</button>
-    <button>Devices & Equipment</button>
-    <button>Infection Control</button>
-    <button>Hospital Services</button>
-  </div>
-  <button class="btn light" onclick="go('home')">Back</button>
-</div>
+  <div class="category">
+    <h2>Medical Consumables</h2>
 
-<!-- SUB-CATEGORIES -->
-<div id="subcats" class="screen">
-  <h2 id="subTitle"></h2>
-  <div class="list">
-    <button onclick="openItems('Syringes')">Syringes</button>
-    <button onclick="openItems('Gloves')">Gloves</button>
-    <button onclick="openItems('IV Sets')">IV Sets</button>
-  </div>
-  <button class="btn light" onclick="go('categories')">Back</button>
-</div>
+    <div class="product">
+      <span>Gloves (Size-based)</span>
+      <button onclick="addItem()">Add</button>
+    </div>
 
-<!-- ITEMS -->
-<div id="items" class="screen">
-  <h2 id="itemTitle"></h2>
-  <div class="list">
-    <button onclick="selectItem('10ml')">10ml</button>
-    <button onclick="selectItem('5ml')">5ml</button>
-  </div>
-  <button class="btn light" onclick="go('subcats')">Back</button>
-</div>
-
-<!-- ITEM ADD -->
-<div id="addItem" class="screen">
-  <h2 id="addItemTitle"></h2>
-  <p class="small">No order placed yet</p>
-
-  <div class="qty">
-    <button onclick="changeQty(-1)">–</button>
-    <span id="qty">1</span>
-    <button onclick="changeQty(1)">+</button>
+    <div class="product">
+      <span>Syringes</span>
+      <button onclick="addItem()">Add</button>
+    </div>
   </div>
 
-  <button class="btn" onclick="addToRequirement()">Add to Requirement</button>
-  <button class="btn light" onclick="go('items')">Back</button>
+  <div class="category">
+    <h2>Infection Control</h2>
+
+    <div class="product">
+      <span>Masks</span>
+      <button onclick="addItem()">Add</button>
+    </div>
+
+    <div class="product">
+      <span>Sanitizer (ml)</span>
+      <button onclick="addItem()">Add</button>
+    </div>
+  </div>
+
 </div>
 
-<!-- REVIEW -->
-<div id="review" class="screen">
-  <h2>Requirement Review</h2>
-  <p class="small">This is not an order</p><br>
-
-  <div id="reviewList"></div>
-
-  <button class="btn" onclick="go('po1')">Proceed to PO</button>
-  <button class="btn light" onclick="cancelAll()">Cancel</button>
-</div>
-
-<!-- PO -->
-<div id="po1" class="screen center">
-  <h2>Generate Purchase Order</h2>
-  <p class="small">You can review before confirming</p><br>
-  <strong>XYZ-HOSP-PO-001</strong><br><br>
-  <button class="btn" onclick="go('po2')">Generate PO</button>
-  <button class="btn light" onclick="go('review')">Back</button>
-</div>
-
-<div id="po2" class="screen center">
-  <h2>Confirm Purchase Order</h2>
-  <p class="small">No order placed without final confirmation</p><br>
-  <button class="btn" onclick="go('po3')">Confirm PO</button>
-  <button class="btn light" onclick="go('review')">Edit</button>
-</div>
-
-<div id="po3" class="screen center">
-  <h2>Final Confirmation</h2>
-  <p class="small">You can cancel before supplier confirmation</p><br>
-  <button class="btn" onclick="alert('PO shared with CARE')">Final Confirm</button>
-  <button class="btn light" onclick="cancelAll()">Cancel</button>
+<div class="cart">
+  <span id="cartCount">Items: 0</span>
+  <button onclick="reviewPO()">Review PO</button>
 </div>
 
 <script>
-let category="",subcat="",item="",qty=1
-let cart=[]
+let count = 0;
 
-function go(id){
- document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'))
- document.getElementById(id).classList.add('active')
+function addItem(){
+  count++;
+  document.getElementById("cartCount").innerText = "Items: " + count;
 }
 
-function openCategory(c){
- category=c
- document.getElementById('subTitle').innerText=c
- go('subcats')
+function reviewPO(){
+  alert("PO Review Screen (next step)");
 }
-
-function openItems(sc){
- subcat=sc
- document.getElementById('itemTitle').innerText=sc
- go('items')
-}
-
-function selectItem(i){
- item=subcat+" "+i
- qty=1
- document.getElementById('addItemTitle').innerText=item
- document.getElementById('qty').innerText=qty
- go('addItem')
-}
-
-function changeQty(v){
- qty=Math.max(1,qty+v)
- document.getElementById('qty').innerText=qty
-}
-
-function addToRequirement(){
- let found=cart.find(x=>x.name===item)
- if(found){found.qty+=qty}
- else{cart.push({name:item,qty:qty})}
- renderReview()
- go('review')
-}
-
-function renderReview(){
- let html=""
- cart.forEach((x,i)=>{
-  html+=`
-  <div class="itemBox">
-   ${x.name}<br>
-   <div class="qty">
-    <button onclick="cartQty(${i},-1)">–</button>
-    <span>${x.qty}</span>
-    <button onclick="cartQty(${i},1)">+</button>
-   </div>
-  </div>`
- })
- document.getElementById('reviewList').innerHTML=html
-}
-
-function cartQty(i,v){
- cart[i].qty=Math.max(1,cart[i].qty+v)
- renderReview()
-}
-
-function cancelAll(){
- if(confirm("Cancel and clear all items?")){
-  cart=[]
-  go('home')
- }
-}
-
-setTimeout(()=>{document.getElementById('splash').style.display='none'},1200)
 </script>
 
 </body>
