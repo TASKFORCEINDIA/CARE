@@ -1,143 +1,240 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CARE 2.0</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>CARE</title>
 
 <style>
-body{
-  margin:0;
-  font-family:Arial,Helvetica,sans-serif;
-  background:#f7f7f7;
-  color:#111;
-}
-header{
-  padding:16px;
-  background:#ffffff;
-  border-bottom:1px solid #ddd;
-  text-align:center;
-}
-header h1{
-  margin:0;
-  font-size:22px;
-}
-
-.container{
-  padding:16px;
-}
-
-.category{
-  margin-bottom:20px;
-}
-.category h2{
-  font-size:18px;
-  margin-bottom:10px;
-}
-
-.product{
-  background:#fff;
-  padding:12px;
-  margin-bottom:10px;
-  border-radius:6px;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  border:1px solid #e5e5e5;
-}
-
-.product span{
-  font-size:14px;
-}
-
-.product button{
-  padding:6px 10px;
-  border:none;
-  background:#111;
-  color:#fff;
-  border-radius:4px;
-  cursor:pointer;
-}
-
-/* CART */
-.cart{
-  position:fixed;
-  bottom:0;
-  left:0;
-  right:0;
-  background:#111;
-  color:#fff;
-  padding:12px 16px;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-}
-
-.cart button{
-  background:#fff;
-  color:#111;
-  border:none;
-  padding:6px 12px;
-  border-radius:4px;
-  cursor:pointer;
-}
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial,Helvetica,sans-serif}
+body{background:#f7f8fa;color:#111}
+.screen{display:none;padding:22px}
+.screen.active{display:block}
+#splash{position:fixed;inset:0;background:#0a6cf1;color:#fff;display:flex;align-items:center;justify-content:center;font-size:34px;letter-spacing:3px;z-index:10}
+.btn{width:100%;padding:16px;margin:10px 0;border:none;border-radius:10px;background:#111;color:#fff;font-size:16px}
+.btn.green{background:#25D366}
+.btn.light{background:#eaeaea;color:#111}
+.list button{width:100%;padding:14px;margin:8px 0;border:1px solid #ddd;border-radius:8px;background:#fff;text-align:left}
+.qty{display:flex;align-items:center;gap:12px;margin:10px 0}
+.qty button{width:38px;height:38px;border-radius:8px;border:1px solid #ccc;background:#fff;font-size:18px}
+.small{font-size:14px;color:#666}
+.center{text-align:center}
+.itemBox{border-bottom:1px solid #ddd;padding:10px 0}
+.topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.badge{background:#111;color:#fff;border-radius:14px;padding:4px 10px;font-size:13px}
+.link{color:#0a6cf1;font-size:14px}
 </style>
 </head>
 
 <body>
 
-<header>
-  <h1>CARE 2.0</h1>
-</header>
+<div id="splash">CARE</div>
 
-<div class="container">
-
-  <div class="category">
-    <h2>Medical Consumables</h2>
-
-    <div class="product">
-      <span>Gloves (Size-based)</span>
-      <button onclick="addItem()">Add</button>
-    </div>
-
-    <div class="product">
-      <span>Syringes</span>
-      <button onclick="addItem()">Add</button>
-    </div>
-  </div>
-
-  <div class="category">
-    <h2>Infection Control</h2>
-
-    <div class="product">
-      <span>Masks</span>
-      <button onclick="addItem()">Add</button>
-    </div>
-
-    <div class="product">
-      <span>Sanitizer (ml)</span>
-      <button onclick="addItem()">Add</button>
-    </div>
-  </div>
-
+<!-- HOME -->
+<div id="home" class="screen active center">
+  <h2>CARE</h2><br/>
+  <button class="btn" onclick="go('categories')">Requirement</button>
+  <button class="btn green">Contact on WhatsApp</button>
 </div>
 
-<div class="cart">
-  <span id="cartCount">Items: 0</span>
-  <button onclick="reviewPO()">Review PO</button>
+<!-- CATEGORIES -->
+<div id="categories" class="screen">
+  <h2>Requirement</h2>
+  <div class="list">
+    <button onclick="openCategory('Medical Consumables')">Medical Consumables</button>
+    <button onclick="openCategory('Lab Consumables')">Lab Consumables</button>
+    <button onclick="openCategory('Infection Control')">Infection Control</button>
+    <button onclick="openEnquiry('Devices & Equipment')">Devices & Equipment</button>
+    <button onclick="openEnquiry('Hospital Services')">Hospital Services</button>
+  </div>
+  <button class="btn light" onclick="go('home')">Back</button>
+</div>
+
+<!-- SUBCATS -->
+<div id="subcats" class="screen">
+  <div class="topbar">
+    <h2 id="subTitle"></h2>
+    <div class="badge" onclick="go('review')">Review (<span id="count">0</span>)</div>
+  </div>
+  <div class="list" id="subList"></div>
+  <button class="btn light" onclick="go('categories')">Back</button>
+</div>
+
+<!-- ITEMS -->
+<div id="items" class="screen">
+  <div class="topbar">
+    <h2 id="itemTitle"></h2>
+    <div class="badge" onclick="go('review')">Review (<span id="count2">0</span>)</div>
+  </div>
+  <div class="list" id="itemList"></div>
+  <button class="btn light" onclick="go('subcats')">Back</button>
+</div>
+
+<!-- ADD ITEM -->
+<div id="addItem" class="screen">
+  <h2 id="addItemTitle"></h2>
+  <p class="small">No order placed yet</p>
+  <div class="qty">
+    <button onclick="changeQty(-1)">–</button>
+    <span id="qty">1</span>
+    <button onclick="changeQty(1)">+</button>
+  </div>
+  <button class="btn" onclick="addToRequirement()">Add to Requirement</button>
+  <div class="small">Item added silently. Review anytime.</div>
+  <button class="btn light" onclick="go('items')">Back</button>
+</div>
+
+<!-- REVIEW -->
+<div id="review" class="screen">
+  <h2>Requirement Review</h2>
+  <p class="small">This is not an order</p><br/>
+  <div id="reviewList"></div>
+  <button class="btn" onclick="go('po1')">Proceed to PO</button>
+  <button class="btn light" onclick="cancelAll()">Cancel</button>
+</div>
+
+<!-- PO FLOW -->
+<div id="po1" class="screen center">
+  <h2>Generate Purchase Order</h2>
+  <p class="small">You can review before confirming</p><br/>
+  <strong>XYZ-HOSP-PO-001</strong><br/><br/>
+  <button class="btn" onclick="go('po2')">Generate PO</button>
+  <button class="btn light" onclick="go('review')">Back</button>
+</div>
+
+<div id="po2" class="screen center">
+  <h2>Confirm Purchase Order</h2>
+  <p class="small">No order placed without final confirmation</p><br/>
+  <button class="btn" onclick="go('po3')">Confirm PO</button>
+  <button class="btn light" onclick="go('review')">Edit</button>
+</div>
+
+<div id="po3" class="screen center">
+  <h2>Final Confirmation</h2>
+  <p class="small">You can cancel before supplier confirmation</p><br/>
+  <button class="btn" onclick="alert('PO shared with CARE')">Final Confirm</button>
+  <button class="btn light" onclick="cancelAll()">Cancel</button>
+</div>
+
+<!-- ENQUIRY -->
+<div id="enquiry" class="screen center">
+  <h2 id="enqTitle"></h2>
+  <p class="small">CARE will assist you with specifications and vendors.</p><br/>
+  <button class="btn green">Contact CARE on WhatsApp</button>
+  <button class="btn light" onclick="go('categories')">Back</button>
 </div>
 
 <script>
-let count = 0;
+const catalog={
+ "Medical Consumables":{
+  "Syringes":["2ml","5ml","10ml","Insulin"],
+  "Gloves":["Small","Medium","Large","XL"],
+  "IV Sets":["Adult","Paediatric"],
+  "Needles":["22G","23G","24G"],
+  "Dressings":["Gauze","Cotton Rolls"]
+ },
+ "Lab Consumables":{
+  "Test Kits":["CBC","Sugar","Pregnancy"],
+  "Sample Containers":["Urine","Stool"],
+  "Vacutainers":["Red","Purple","Grey"],
+  "Slides & Tubes":["Standard"]
+ },
+ "Infection Control":{
+  "Masks":["3-Ply","N95"],
+  "Sanitizer":["500ml","5L"],
+  "Disinfectants":["Surface"],
+  "Handwash":["Standard"]
+ }
+};
 
-function addItem(){
-  count++;
-  document.getElementById("cartCount").innerText = "Items: " + count;
+let category="",subcat="",item="",qty=1,cart=[];
+
+function go(id){
+ document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+ document.getElementById(id).classList.add('active');
+ updateCounts();
 }
 
-function reviewPO(){
-  alert("PO Review Screen (next step)");
+function openCategory(c){
+ category=c;
+ document.getElementById('subTitle').innerText=c;
+ const list=document.getElementById('subList'); list.innerHTML="";
+ Object.keys(catalog[c]).forEach(s=>{
+  const b=document.createElement('button');
+  b.textContent=s; b.onclick=()=>openItems(s);
+  list.appendChild(b);
+ });
+ go('subcats');
 }
+
+function openItems(s){
+ subcat=s;
+ document.getElementById('itemTitle').innerText=s;
+ const list=document.getElementById('itemList'); list.innerHTML="";
+ catalog[category][s].forEach(v=>{
+  const b=document.createElement('button');
+  b.textContent=v; b.onclick=()=>selectItem(`${s} ${v}`);
+  list.appendChild(b);
+ });
+ go('items');
+}
+
+function selectItem(name){
+ item=name; qty=1;
+ document.getElementById('addItemTitle').innerText=name;
+ document.getElementById('qty').innerText=qty;
+ go('addItem');
+}
+
+function changeQty(v){
+ qty=Math.max(1,qty+v);
+ document.getElementById('qty').innerText=qty;
+}
+
+function addToRequirement(){
+ const f=cart.find(x=>x.name===item);
+ if(f) f.qty+=qty; else cart.push({name:item,qty});
+ go('items');
+}
+
+function renderReview(){
+ const r=document.getElementById('reviewList'); r.innerHTML="";
+ cart.forEach((x,i)=>{
+  r.innerHTML+=`
+   <div class="itemBox">
+    ${x.name}
+    <div class="qty">
+     <button onclick="cartQty(${i},-1)">–</button>
+     <span>${x.qty}</span>
+     <button onclick="cartQty(${i},1)">+</button>
+    </div>
+   </div>`;
+ });
+}
+
+function cartQty(i,v){
+ cart[i].qty=Math.max(1,cart[i].qty+v);
+ renderReview();
+}
+
+function updateCounts(){
+ document.getElementById('count').innerText=cart.length;
+ document.getElementById('count2').innerText=cart.length;
+ renderReview();
+}
+
+function cancelAll(){
+ if(confirm("Cancel and clear all items?")){
+  cart=[]; go('home');
+ }
+}
+
+function openEnquiry(t){
+ document.getElementById('enqTitle').innerText=t;
+ go('enquiry');
+}
+
+setTimeout(()=>{document.getElementById('splash').style.display='none'},1200);
 </script>
 
 </body>
