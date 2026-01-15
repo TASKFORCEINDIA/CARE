@@ -70,8 +70,10 @@ body{background:#f7f8fa;color:#111}
 <!-- ADD ITEM -->
 <div id="addItem" class="screen">
   <h2 id="addItemTitle"></h2>
-  <p class="small">No order placed yet</p>
-  <div class="qty">
+<p class="small" id="unitText"></p>
+<p class="small">No order placed yet</p>
+<div class="qty">
+
     <button onclick="changeQty(-1)">–</button>
     <span id="qty">0</span>
     <button onclick="changeQty(1)">+</button>
@@ -131,6 +133,13 @@ const catalog={
 };
 
 let category="", subcat="", item="", qty=0, cart=[];
+const unitMap = {
+  "Syringes": "Box of 100",
+  "Gloves": "Box of 100",
+  "Needles": "Box of 100",
+  "IV Sets": "Pack of 25",
+  "Dressings": "Pack of 10"
+};
 
 function go(id){
  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
@@ -165,14 +174,24 @@ function openItems(s){
  });
  go('items');
 }
-
 function selectItem(name){
- item=name;
- qty=0;
- document.getElementById('addItemTitle').innerText=name;
- document.getElementById('qty').innerText=qty;
- go('addItem');
+  item = name;
+  qty = 0;
+
+  document.getElementById('addItemTitle').innerText = name;
+
+  let unit = "Standard pack";
+  Object.keys(unitMap).forEach(k=>{
+    if(name.includes(k)) unit = unitMap[k];
+  });
+
+  document.getElementById('unitText').innerText = "Unit: " + unit;
+  document.getElementById('qty').innerText = qty;
+
+  go('addItem');
 }
+
+
 
 function changeQty(v){
  qty=Math.max(0,qty+v);
