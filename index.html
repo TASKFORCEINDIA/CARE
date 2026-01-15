@@ -76,7 +76,7 @@ body{background:#f7f8fa;color:#111}
   <p class="small">No order placed yet</p>
   <div class="qty">
     <button onclick="changeQty(-1)">–</button>
-    <span id="qty">1</span>
+    <span id="qty">0</span>
     <button onclick="changeQty(1)">+</button>
   </div>
   <button class="btn" onclick="addToRequirement()">Add to Requirement</button>
@@ -147,7 +147,7 @@ const catalog={
  }
 };
 
-let category="",subcat="",item="",qty=1,cart=[];
+let category="",subcat="",item="",qty=0,cart=[];
 
 function go(id){
  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
@@ -178,24 +178,33 @@ function openItems(s){
  });
  go('items');
 }
-
 function selectItem(name){
- item=name; qty=1;
- document.getElementById('addItemTitle').innerText=name;
- document.getElementById('qty').innerText=qty;
- go('addItem');
+  item = name;
+  qty = 0;
+  document.getElementById('addItemTitle').innerText = name;
+  document.getElementById('qty').innerText = qty;
+  go('addItem');
 }
+
+
+
 
 function changeQty(v){
- qty=Math.max(1,qty+v);
+ qty=Math.max(0,qty+v);
  document.getElementById('qty').innerText=qty;
 }
-
 function addToRequirement(){
- const f=cart.find(x=>x.name===item);
- if(f) f.qty+=qty; else cart.push({name:item,qty});
- go('items');
+  if(qty === 0){
+    alert("Please select quantity");
+    return;
+  }
+  const f = cart.find(x => x.name === item);
+  if(f) f.qty += qty;
+  else cart.push({name:item, qty});
+  go('items');
 }
+
+
 
 function renderReview(){
  const r=document.getElementById('reviewList'); r.innerHTML="";
@@ -210,12 +219,14 @@ function renderReview(){
     </div>
    </div>`;
  });
+function cartQty(i,v){
+  cart[i].qty = Math.max(0, cart[i].qty + v);
+  if(cart[i].qty === 0){
+    cart.splice(i,1); // remove item if qty becomes 0
+  }
+  renderReview();
 }
 
-function cartQty(i,v){
- cart[i].qty=Math.max(1,cart[i].qty+v);
- renderReview();
-}
 
 function updateCounts(){
  document.getElementById('count').innerText=cart.length;
