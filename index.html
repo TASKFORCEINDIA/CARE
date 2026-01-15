@@ -7,49 +7,54 @@
 
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:Arial,Helvetica,sans-serif}
-body{background:#f9fafb;color:#111}
+body{background:#f7f8fa;color:#111}
 
-/* SCREENS */
-.screen{display:none;padding:30px}
+/* Screens */
+.screen{display:none;padding:24px}
 .screen.active{display:block}
 
-/* SPLASH */
+/* Splash */
 #splash{
- position:fixed;top:0;left:0;width:100%;height:100vh;
- background:#1f6fe0;color:#fff;
+ position:fixed;inset:0;
+ background:#0a6cf1;color:#fff;
  display:flex;align-items:center;justify-content:center;
- font-size:36px;letter-spacing:3px;z-index:10
+ font-size:34px;letter-spacing:3px;z-index:10
 }
 
-/* HEADER */
-.header{text-align:center;margin-bottom:30px}
-.header h1{letter-spacing:2px}
-
-/* BUTTONS */
+/* Buttons */
 .btn{
  width:100%;padding:16px;margin:12px 0;
  border:none;border-radius:10px;
  background:#111;color:#fff;font-size:16px
 }
-.btn.secondary{background:#25D366}
+.btn.green{background:#25D366}
 .btn.light{background:#eaeaea;color:#111}
 
-/* LIST */
+/* List buttons */
 .list button{
  width:100%;padding:14px;margin:8px 0;
  border:1px solid #ddd;border-radius:8px;
  background:#fff;text-align:left
 }
 
-/* SEARCH */
+/* Search */
 input{
- width:100%;padding:14px;
- border:1px solid #ddd;border-radius:8px;
- margin:15px 0
+ width:100%;padding:14px;margin:12px 0;
+ border:1px solid #ccc;border-radius:8px
 }
 
-/* INFO TEXT */
-.small{color:#666;font-size:14px;margin-top:8px}
+/* Quantity */
+.qty{
+ display:flex;gap:10px;align-items:center;justify-content:center
+}
+.qty button{
+ width:40px;height:40px;border-radius:8px;border:1px solid #ccc;background:#fff
+}
+.qty span{font-size:18px}
+
+/* Text helpers */
+h2{margin-bottom:10px}
+.small{font-size:14px;color:#666}
 .center{text-align:center}
 </style>
 </head>
@@ -60,19 +65,17 @@ input{
 <div id="splash">CARE</div>
 
 <!-- HOME -->
-<div id="home" class="screen active">
-  <div class="header">
-    <h1>CARE</h1>
-  </div>
+<div id="home" class="screen active center">
+  <h2>CARE</h2><br>
   <button class="btn" onclick="go('categories')">Requirement</button>
-  <button class="btn secondary" onclick="alert('WhatsApp support')">Contact on WhatsApp</button>
+  <button class="btn green">Contact on WhatsApp</button>
 </div>
 
 <!-- CATEGORIES -->
 <div id="categories" class="screen">
   <h2>Requirement</h2>
   <div class="list">
-    <button onclick="openSub()">Medical Consumables</button>
+    <button onclick="go('subcats')">Medical Consumables</button>
     <button>Lab Consumables</button>
     <button>Devices & Equipment</button>
     <button>Infection Control</button>
@@ -81,24 +84,41 @@ input{
   <button class="btn light" onclick="go('home')">Back</button>
 </div>
 
-<!-- SUBCATEGORY + SEARCH -->
-<div id="search" class="screen">
+<!-- SUB-CATEGORIES -->
+<div id="subcats" class="screen">
   <h2>Medical Consumables</h2>
-  <input placeholder="Search medical items…">
-  <div class="small">Example: Syringes, Gloves, Test kits</div>
   <div class="list">
-    <button onclick="selectItem()">Syringes 10ml</button>
-    <button>Test Kits</button>
-    <button>Thermometers</button>
+    <button onclick="go('search')">Syringes</button>
+    <button onclick="go('search')">Gloves</button>
+    <button onclick="go('search')">IV Sets</button>
+    <button onclick="go('search')">Catheters</button>
   </div>
   <button class="btn light" onclick="go('categories')">Back</button>
 </div>
 
-<!-- ITEM COMFORT -->
+<!-- SEARCH (ONLY AFTER SUBCAT) -->
+<div id="search" class="screen">
+  <h2>Syringes</h2>
+  <input placeholder="Search within syringes…">
+  <div class="small">Example: 10ml, 5ml, insulin</div>
+  <div class="list">
+    <button onclick="go('item')">Syringes 10ml</button>
+    <button onclick="go('item')">Syringes 5ml</button>
+  </div>
+  <button class="btn light" onclick="go('subcats')">Back</button>
+</div>
+
+<!-- ITEM -->
 <div id="item" class="screen center">
-  <h2>Item selected</h2>
+  <h2>Syringes 10ml</h2>
   <p class="small">No order placed yet</p><br>
-  <strong>Syringes 10ml</strong><br><br>
+
+  <div class="qty">
+    <button onclick="changeQty(-1)">–</button>
+    <span id="qty">1</span>
+    <button onclick="changeQty(1)">+</button>
+  </div><br>
+
   <button class="btn" onclick="go('review')">Add to Requirement</button>
   <button class="btn light" onclick="go('search')">Back</button>
 </div>
@@ -106,32 +126,19 @@ input{
 <!-- REVIEW -->
 <div id="review" class="screen">
   <h2>Requirement Review</h2>
-  <p class="small">This is not an order.</p><br>
-  • Syringes 10ml – Qty: 10<br><br>
-  <button class="btn" onclick="go('po1')">Proceed to PO</button>
+  <p class="small">This is not an order</p><br>
+  • Syringes 10ml – Qty: <span id="reviewQty">1</span><br><br>
+  <button class="btn" onclick="go('po')">Proceed to PO</button>
   <button class="btn light" onclick="go('home')">Cancel</button>
 </div>
 
-<!-- PO FLOW -->
-<div id="po1" class="screen center">
-  <h2>Generate Purchase Order</h2>
-  <p class="small">You can review before confirming.</p><br>
+<!-- PO -->
+<div id="po" class="screen center">
+  <h2>Generate PO</h2>
+  <p class="small">You can review before confirming</p><br>
   <strong>XYZ-HOSP-PO-001</strong><br><br>
-  <button class="btn" onclick="go('po2')">Generate PO</button>
-</div>
-
-<div id="po2" class="screen center">
-  <h2>Confirm Purchase Order</h2>
-  <p class="small">No order placed without final confirmation.</p><br>
-  <button class="btn" onclick="go('po3')">Confirm PO</button>
-  <button class="btn light" onclick="go('review')">Edit</button>
-</div>
-
-<div id="po3" class="screen center">
-  <h2>Final Confirmation</h2>
-  <p class="small">You can cancel before supplier confirmation.</p><br>
-  <button class="btn" onclick="alert('PO Shared with CARE')">Final Confirm</button>
-  <button class="btn light" onclick="go('home')">Cancel</button>
+  <button class="btn">Generate PO</button>
+  <button class="btn light" onclick="go('review')">Back</button>
 </div>
 
 <script>
@@ -139,8 +146,14 @@ function go(id){
  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'))
  document.getElementById(id).classList.add('active')
 }
-function openSub(){ go('search') }
-function selectItem(){ go('item') }
+
+let qty=1
+function changeQty(v){
+ qty=Math.max(1,qty+v)
+ document.getElementById('qty').innerText=qty
+ document.getElementById('reviewQty').innerText=qty
+}
+
 setTimeout(()=>{document.getElementById('splash').style.display='none'},1200)
 </script>
 
