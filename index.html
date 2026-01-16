@@ -102,7 +102,24 @@ body{background:#f7f8fa;color:#111}
   <button class="btn" onclick="go('poDetails')">Generate PO</button>
 
   <button class="btn light" onclick="go('review')">Back</button>
-  
+  </div>
+<div id="poDetails" class="screen">
+  <h2>PO Details</h2>
+
+  <input id="orgName" placeholder="Hospital / Lab Name" class="input" />
+  <input id="orgAddress" placeholder="Delivery Address" class="input" />
+  <input id="contactName" placeholder="Raised By (Name & Role)" class="input" />
+  <input id="contactPhone" placeholder="Contact Mobile Number" class="input" />
+
+  <label class="small">
+    <input type="checkbox" id="authConfirm" />
+    I confirm I am authorised to raise this requirement
+  </label>
+
+  <button class="btn" onclick="confirmPODetails()">Continue</button>
+  <button class="btn light" onclick="go('po1')">Back</button>
+</div>
+
 
 <div id="po2" class="screen center">
   <h2>Confirm Purchase Order</h2>
