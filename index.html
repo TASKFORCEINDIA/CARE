@@ -257,7 +257,11 @@ function updateCounts(){
  renderReview();
 }
 
-function proceedToPO(){
+
+
+ if(cart.length===0){ alert("No items in requirement"); return; }
+ go('po1');
+}
   function confirmPODetails(){
   const name = document.getElementById('orgName').value.trim();
   const addr = document.getElementById('orgAddress').value.trim();
@@ -274,9 +278,6 @@ function proceedToPO(){
   go('po2');
 }
 
- if(cart.length===0){ alert("No items in requirement"); return; }
- go('po1');
-}
 function sendPOonWhatsApp(){
   let msg = "CARE – Purchase Requirement\n\n";
 
