@@ -95,11 +95,30 @@ body{background:#f7f8fa;color:#111}
 
 <!-- PO FLOW -->
 <div id="po1" class="screen center">
+  
   <h2>Generate Purchase Order</h2>
   <p class="small">You can review before confirming</p><br/>
   <strong>XYZ-HOSP-PO-001</strong><br/><br/>
-  <button class="btn" onclick="go('po2')">Generate PO</button>
+  <button class="btn" onclick="go('poDetails')">Generate PO</button>
+
   <button class="btn light" onclick="go('review')">Back</button>
+  <div id="poDetails" class="screen">
+  <h2>PO Details</h2>
+
+  <input id="orgName" placeholder="Hospital / Lab Name" class="input" />
+  <input id="orgAddress" placeholder="Delivery Address" class="input" />
+  <input id="contactName" placeholder="Raised By (Name & Role)" class="input" />
+  <input id="contactPhone" placeholder="Contact Mobile Number" class="input" />
+
+  <label class="small">
+    <input type="checkbox" id="authConfirm" />
+    I confirm I am authorised to raise this requirement
+  </label>
+
+  <button class="btn" onclick="confirmPODetails()">Continue</button>
+  <button class="btn light" onclick="go('po1')">Back</button>
+</div>
+
 </div>
 
 <div id="po2" class="screen center">
@@ -135,6 +154,8 @@ const catalog={
 };
 
 let category="", subcat="", item="", qty=0, cart=[];
+  let poInfo = {};
+
 const unitMap = {
   "Syringes": "Box of 100",
   "Gloves": "Box of 100",
@@ -237,17 +258,43 @@ function updateCounts(){
 }
 
 function proceedToPO(){
+  function confirmPODetails(){
+  const name = document.getElementById('orgName').value.trim();
+  const addr = document.getElementById('orgAddress').value.trim();
+  const person = document.getElementById('contactName').value.trim();
+  const phone = document.getElementById('contactPhone').value.trim();
+  const ok = document.getElementById('authConfirm').checked;
+
+  if(!name || !addr || !person || !phone || !ok){
+    alert("Please fill all details and confirm authority");
+    return;
+  }
+
+  poInfo = { name, addr, person, phone };
+  go('po2');
+}
+
  if(cart.length===0){ alert("No items in requirement"); return; }
  go('po1');
 }
 function sendPOonWhatsApp(){
   let msg = "CARE – Purchase Requirement\n\n";
 
-  cart.forEach(x=>{
-    msg += `• ${x.name} – ${x.qty}\n`;
-  });
+  msg += "Hospital / Lab:\n";
+msg += poInfo.name + "\n";
+msg += poInfo.addr + "\n\n";
 
-  msg += "\nGenerated via CARE";
+msg += "Raised By:\n";
+msg += poInfo.person + "\n";
+msg += "Contact: " + poInfo.phone + "\n\n";
+
+msg += "Items:\n";
+cart.forEach(x=>{
+  msg += `• ${x.name} – ${x.qty}\n`;
+});
+
+msg += "\nGenerated via CARE";
+
 
   const phone = "918179456654"; // 🔴 replace with any number for testing
   const url = "https://wa.me/" + phone + "?text=" + encodeURIComponent(msg);
